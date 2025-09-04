@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtuell Kaffemaskin</title>
+  <style>
+    body {
+      background-color: black;
+      color: violet;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #button-container {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: chocolate;
+      color: black;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    button:hover:not(:disabled) {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    button:disabled {
+      background-color: gray;
+      cursor: not-allowed;
+    }
+
+    #tilbakestill-alle {
+      background-color: red;
+      margin-top: 20px;
+      padding: 10px 25px;
+      border-radius: 8px;
+      color: white;
+    }
+
+    #messageDiv {
+      color: yellow;
+      font-size: 18px;
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Coffeemaster Pro!</h1>
+<img src="coffee-machine.png" alt="Kaffemaskin" style="width:200px;height:auto;">
+
+<div id="button-container">
+  <div>
+    <button id="btn0" onclick="trykkKnapp(0)">Kaffe</button>
+    <span id="label0">Verdi: 20</span>
+  </div>
+  <div>
+    <button id="btn1" onclick="trykkKnapp(1)">Melk</button>
+    <span id="label1">Verdi: 20</span>
+  </div>
+  <div>
+    <button id="btn2" onclick="trykkKnapp(2)">Vann</button>
+    <span id="label2">Verdi: 20</span>
+  </div>
+  <div>
+    <button id="btn3" onclick="trykkKnapp(3)">Kakao</button>
+    <span id="label3">Verdi: 20</span>
+  </div>
+</div>
+
+<button id="tilbakestill-alle" onclick="tilbakestillAlle()">Tilbakestill alle</button>
+
+<div id="messageDiv"></div>
+
+<script>
+  const startVerdier = [20, 20, 20, 20];
+  const knappNavn = ["Kaffe", "Melk", "Vann", "Kakao"];
+  const minkerMed = [1, 5, 5, 1];
+  let verdier = [...startVerdier];
+
+  let coffeeCounter = 0;
+  let waterCounter = 0;
+  let cocoaCounter = 0;
+  let milkCounter = 0;
+
+  function trykkKnapp(i) {
+    // Minke verdi
+    verdier[i] -= minkerMed[i];
+    if (verdier[i] < 0) verdier[i] = 0;
+
+    // Oppdater tekst
+    document.getElementById("label" + i).textContent = "Verdi: " + verdier[i];
+
+    // Sjekk meldinger
+    if (knappNavn[i] === "Kaffe") {
+      coffeeMessage(verdier[i]);
+    } else if (knappNavn[i] === "Melk") {
+      milkMessage(verdier[i]);
+    } else if (knappNavn[i] === "Vann") {
+      waterMessage(verdier[i]);
+    } else if (knappNavn[i] === "Kakao") {
+      cocoaMessage(verdier[i]);
+    }
+
+    // Deaktiverer knapp hvis verdi = 0
+    if (verdier[i] === 0) {
+      document.getElementById("btn" + i).disabled = true;
+    }
+  }
+
+  function tilbakestillAlle() {
+    verdier = [...startVerdier];
+    for (let i = 0; i < verdier.length; i++) {
+      document.getElementById("label" + i).textContent = "Verdi: " + verdier[i];
+      document.getElementById("btn" + i).disabled = false; // aktiverer knapp igjen
+    }
+    document.getElementById("messageDiv").innerHTML = "";
+  }
+
+  // Meldingsfunksjoner basert på VERDI
+
+function coffeeMessage() {
+    if (coffeeCounter == 15) {
+       document.getElementById("messageDiv").innerHTML = `Trenger mer kaffe :)`;
+    } else if (coffeeCounter == 10) {
+        document.getElementById("messageDiv").innerHTML = `Kaffe??`;
+    } else if (coffeeCounter == 5) {
+         document.getElementById("messageDiv").innerHTML = `FYLL OPP KAFFE!!`;
+    }
+}
+
+function waterMessage() {
+    if (waterCounter == 17) {
+        document.getElementById("messageDiv").innerHTML = `Det kan være lurt å fylle på vann`;
+    } else if (waterCounter == 9) {
+        document.getElementById("messageDiv").innerHTML = `Hallo, jeg trenger mer vann!`;
+    } else if (waterCounter == 6) {
+         document.getElementById("messageDiv").innerHTML = `Om du ikke fyller på med vann nå, så tørker jeg ut!!!`;
+    }
+}
+
+function cocoaMessage() {
+    if (cocoaCounter == 14) {
+        document.getElementById("messageDiv").innerHTML = `Kakao er digg`;
+    } else if (cocoaCounter == 8) {
+        document.getElementById("messageDiv").innerHTML = `Kakao er megadigg`;
+    } else if (cocoaCounter == 5) {
+         document.getElementById("messageDiv").innerHTML = `Kakao er superdupermegadigg!!`;
+    }
+}
+
+function milkMessage() {
+    if (milkCounter == 19) {
+        document.getElementById("messageDiv").innerHTML = `Melk er en av fem om dagen`;
+    } else if (milkCounter == 13) {
+        document.getElementById("messageDiv").innerHTML = `Det kan være greit å fylle på med melk nå altså!!`;
+    } else if (milkCounter == 4) {
+         document.getElementById("messageDiv").innerHTML = `jeg vil ha MELK NÅ!!!!`;
+    }
+}
+</script>
+
+</body>
+</html>
